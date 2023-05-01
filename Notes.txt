@@ -66,3 +66,72 @@ Let lval be GetValue(lref).
 Let rref be the result of evaluating RelationalExpression.
 Let rval be GetValue(rref).
 Return the result of performing the strict equality comparison rval === lval. 
+
+==================
+
+Function Invocation Patters
+
+It doesn't matter where a function is 
+nor does matter who owns the function
+
+What matters is HOW the function is invoked
+
+
+1. As a method of an object
+  `this` refers to the object
+  ```
+    var emp = {
+      name: 'Matheus'
+    }
+
+    function whoAmI() {
+      console.log('I am ', this.name);
+    }
+
+    // Adds the function as a property of the object;
+    // In JavaScript, a function is a property
+    emp['whoAmI'] = whoAmI 
+
+
+    var emp = {
+      name: 'Matheus'
+      whoAmI = REFERENCE TO THE FUNCTION whoAmI()
+    }
+
+    emp.whoAmI();
+    $ I am Matheus
+  ```
+
+Note that this is just a reference. Almost like it appends the function to the object in its state.
+For that reason, if the function whoAmI changes, it will NOT affect the result of all the other objects.
+It will create a new function with the same name.
+
+```
+whoAmI();
+> I am  
+```
+
+That is because it refers to the Global Scope, `window.name`
+```
+window.name
+> ''
+```
+
+POC: 
+```
+window.name = 'JS Class'
+> 'JS Class'
+whoAmI();
+> I am  JS Class
+```
+
+
+--- 
+
+2. As a function
+3. Using the 'call' method of the function
+4. Using the 'apply' method of the function
+5. As an 'Immediately Invoke Function Expression' (IIFE)
+6. Using the 'new' keyword
+
+============
