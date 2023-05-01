@@ -1,19 +1,16 @@
-function normalizeArray(val) {
+function normalizedSum(val) {
   return val.reduce((result, value) => result + normalize(value), 0);
 }
 
 function add(...args) {
-  return normalizeArray(args);
+  return normalizedSum(args);
 }
 
 function normalize(val) {
-  return Array.isArray(val)
-    ? normalizeArray(val)
-    : typeof val === "function"
-    ? normalize(val())
-    : isNaN(val)
-    ? 0
-    : parseInt(val);
+  // prettier-ignore
+  return Array.isArray(val) ? normalizedSum(val) : 
+         typeof val === "function" ? normalize(val()) : 
+         isNaN(val) ? 0 : parseInt(val);
 }
 
 test("add(10,20) = 30", function () {
