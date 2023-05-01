@@ -1,11 +1,13 @@
-const spinner = {
-  count: 0,
-  up() {
-    this.count++;
-    return this.count;
-  },
-  down() {
-    this.count--;
-    return this.count;
-  },
-};
+const spinner = (() => {
+  let count = 0;
+  return {
+    up() {
+      count++;
+      return count;
+    },
+    down() {
+      count--;
+      return count;
+    },
+  };
+})();
