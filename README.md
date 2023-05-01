@@ -20,7 +20,7 @@ Modify the package.json file with the following:
 
 ```
 "scripts": {
-    "test": "jest"
+    "test": "jest --watchAll"
 },
 
 ```
