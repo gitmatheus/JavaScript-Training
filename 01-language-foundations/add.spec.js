@@ -1,7 +1,11 @@
 function normalizedSum(val) {
   return val.reduce((result, value) => result + normalize(value), 0);
 }
-
+// Uses spread notation
+// https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Spread_syntax
+// To be expanded in places where zero or more arguments (for function calls) or elements (for array literals) are expected.
+// In an object literal, the spread syntax enumerates the properties of an object
+// and adds the key-value pairs to the object being created.
 function add(...args) {
   return normalizedSum(args);
 }
