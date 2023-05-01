@@ -1,12 +1,8 @@
-function normalizedSum(val) {
-  return val.reduce((result, value) => result + normalize(value), 0);
-}
-
 function normalize(val) {
   // prettier-ignore
-  return Array.isArray(val) ? normalizedSum(val) : 
-         typeof val === "function" ? normalize(val()) : 
-         isNaN(val) ? 0 : parseInt(val);
+  if (Array.isArray(val)) return val.reduce((result, value) => result + normalize(value), 0);
+  if (typeof val === "function") return normalize(val());
+  return isNaN(val) ? 0 : parseInt(val);
 }
 
 // Uses spread notation
@@ -15,7 +11,7 @@ function normalize(val) {
 // In an object literal, the spread syntax enumerates the properties of an object
 // and adds the key-value pairs to the object being created.
 function add(...args) {
-  return normalizedSum(args);
+  return args.reduce((result, value) => result + normalize(value), 0);
 }
 
 test("add(10,20) = 30", function () {
