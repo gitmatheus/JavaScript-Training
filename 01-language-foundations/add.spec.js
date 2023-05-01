@@ -1,6 +1,14 @@
 function normalizedSum(val) {
   return val.reduce((result, value) => result + normalize(value), 0);
 }
+
+function normalize(val) {
+  // prettier-ignore
+  return Array.isArray(val) ? normalizedSum(val) : 
+         typeof val === "function" ? normalize(val()) : 
+         isNaN(val) ? 0 : parseInt(val);
+}
+
 // Uses spread notation
 // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Spread_syntax
 // To be expanded in places where zero or more arguments (for function calls) or elements (for array literals) are expected.
@@ -8,13 +16,6 @@ function normalizedSum(val) {
 // and adds the key-value pairs to the object being created.
 function add(...args) {
   return normalizedSum(args);
-}
-
-function normalize(val) {
-  // prettier-ignore
-  return Array.isArray(val) ? normalizedSum(val) : 
-         typeof val === "function" ? normalize(val()) : 
-         isNaN(val) ? 0 : parseInt(val);
 }
 
 test("add(10,20) = 30", function () {
