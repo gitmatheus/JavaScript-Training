@@ -47,3 +47,22 @@ Modify the package.json file with the following:
 Run the test 
 npm test
    No tests found, exiting with code 1
+
+------
+
+
+https://262.ecma-international.org/5.1/#sec-11.9.3
+Abstract equality comparison algorithm
+( == )
+
+The comparison x == y, where x and y are values, produces true or false.
+
+The Strict Equals Operator ( === )
+
+The production EqualityExpression : EqualityExpression === RelationalExpression is evaluated as follows:
+
+Let lref be the result of evaluating EqualityExpression.
+Let lval be GetValue(lref).
+Let rref be the result of evaluating RelationalExpression.
+Let rval be GetValue(rref).
+Return the result of performing the strict equality comparison rval === lval. 
