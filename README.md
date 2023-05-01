@@ -154,6 +154,47 @@ greet.apply(emp, ['Mr.', 'Have a nice day'])
 
 5. As an 'Immediately Invoke Function Expression' (IIFE)
 
+```
+(function fn(){
+    console.log('fn invoked')'
+})()
+```
+
+```
+(function add(x,y){
+    return x+y;
+})(100,200)
+
+> 300
+```
+
+These functions are immediately collected by the garbage collector after used.
+
+However, variables that are still in use, the garbage collector won't remove them.
+
+Eg: in the code below, counter is declared, then referenced inside the method `onBtnTrackClick()`, which is referenced on the method `onDocumentLoad()`, that has a listener.
+So as long as the page is loaded, the variable is kept and not removed:
+
+```
+var counter = 0;
+function onBtnTrackClick() {
+    var divResult = document.getElementById("divResult");
+    ++counter;
+    divResult.innerText = counter;
+}
+function onDocumentLoad() {
+    var btnTrack = document.getElementById("btnTrack");
+    btnTrack.addEventListener("click", onBtnTrackClick);
+}
+
+window.addEventListener("load", onDocumentLoad);
+
+```
+
+6. Using the 'new' keyword
+
+---
+
 Prevent the context from changing.
 
 ```
@@ -182,7 +223,5 @@ product['whoAmI'] = whoAmI
 product.whoAmI()
 > I am Matheus
 ```
-
-6. Using the 'new' keyword
 
 ============
