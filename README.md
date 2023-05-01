@@ -153,6 +153,36 @@ greet.apply(emp, ['Mr.', 'Have a nice day'])
 ```
 
 5. As an 'Immediately Invoke Function Expression' (IIFE)
+
+Prevent the context from changing.
+
+```
+var emp = {
+name: 'Matheus'
+}
+
+function whoAmI() {
+console.log('I am ', this.name);
+}
+
+// Binds the method to the object
+whoAmI = whoAmI.bind(emp)
+
+whoAmI()
+> I am Matheus
+
+var product = {
+    name : 'Product'
+}
+
+// Adds the function as a property of the object;
+// In JavaScript, a function is a property
+product['whoAmI'] = whoAmI
+
+product.whoAmI()
+> I am Matheus
+```
+
 6. Using the 'new' keyword
 
 ============
