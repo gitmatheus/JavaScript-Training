@@ -1,5 +1,5 @@
 const spinner = (() => {
-  let count = 0;
+  var count = 0;
   return {
     up() {
       count++;
