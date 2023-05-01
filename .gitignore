@@ -1,0 +1,2 @@
+# Ignores node modules
+**/node_modules/**

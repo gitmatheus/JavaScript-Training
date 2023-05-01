@@ -1,0 +1,49 @@
+Matheus Gonçalves
+I'm a Lead Engineer on team Trailhead
+
+Primary Skill set is back end development, Java, C, TypeScript, Ruby, Apex 
+
+Experience with Angular, JQuery, Next 
+
+I'm very interested in understanding vanilla JS, local storage, events, and tests with Jest
+
+class created on console is actually is a FUNCTION internally. 
+
+ES5 = var
+ES6 = let 
+
+Types
+string, number, boolean, object, undefined, function 
+
+
+How to know the ESS version? 
+
+JQuery: 
+  $(domnode) -> returns a reference to a wrapper that contains several methods
+
+  var le = document.getElem... 
+  $le = $(le) 
+  $le.hide()
+  $le.show()
+
+
+ID requires a hash "#"
+$ is the only function you need, just pass the parameter (node, function, object, etc)
+
+
+------
+NODE 
+
+npm init -y
+Creates a package.json with default values (-y)
+
+npm install jest 
+
+Modify the package.json file with the following:
+    "scripts": {
+        "test": "jest"
+    },
+
+Run the test 
+npm test
+   No tests found, exiting with code 1
