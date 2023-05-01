@@ -224,4 +224,28 @@ product.whoAmI()
 > I am Matheus
 ```
 
-============
+---
+
+### Higher Order Functions
+
+- Functions can be passed as arguments
+- Functions can be return as return values
+
+### Pure Functions
+
+- Functions without any side-effects
+- The invocation of the function can be replaced with the result of the function itself, without affecting the final outcome
+- Only depends on the inputs
+
+```
+function add(x, y) {
+    return x + y;
+    // console.log(result);
+}
+
+```
+
+Note that this function doesn't depend on datetime, nor show things on console, and only references the inputs.
+So, the output is consistent and immutable.
+
+### Memoization
