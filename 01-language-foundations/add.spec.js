@@ -1,5 +1,5 @@
 function normalize(val) {
-  if (Array.isArray(val)) return add.apply(this, val);
+  if (Array.isArray(val)) return add(...val);
   if (typeof val === "function") return normalize(val());
   return isNaN(val) ? 0 : parseInt(val);
 }
