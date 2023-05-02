@@ -33,11 +33,12 @@
 // any function with any number of arguments
 function memoize(fn) {
   var results = {};
-  return function (val) {
-    if (results.hasOwnProperty(val)) return results[val];
-    console.log("processing :", val);
-    results[val] = fn(val);
-    return results[val];
+  return function (...args) {
+    if (results.hasOwnProperty(args)) return results[args];
+    console.log("processing :", args);
+    var result = fn(args);
+    results[args] = result;
+    return result;
   };
 }
 
@@ -54,6 +55,13 @@ var isPrime = memoize(function isPrime(no) {
   return true;
 });
 
-var add = memoize(function (x, y) {
-  return x + y;
+var add = memoize(function add(args) {
+  function parseArg(n) {
+    if (typeof n === "function") return parseArg(n());
+    if (Array.isArray(n)) return add.apply(this, n);
+    return isNaN(n) ? 0 : parseInt(n);
+  }
+  return arguments.length <= 1
+    ? parseArg(arguments[0])
+    : parseArg(arguments[0]) + add.apply(this, [].slice.call(arguments, 1));
 });
