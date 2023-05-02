@@ -249,3 +249,24 @@ Note that this function doesn't depend on datetime, nor show things on console, 
 So, the output is consistent and immutable.
 
 ### Memoization
+
+```
+function memoize (fn){
+    var results = {}
+
+}
+```
+
+---
+
+## Working with collections
+
+### Limits for this class
+
+DO NOT use out of the box methods for sort, filter and group.
+
+- sort
+- filter
+- group
+
+The goal is to use the requirement to learn more about how JavaScript works behind the scenes.
