@@ -270,3 +270,20 @@ DO NOT use out of the box methods for sort, filter and group.
 - group
 
 The goal is to use the requirement to learn more about how JavaScript works behind the scenes.
+
+### Classes, Constructors, Getters, and Setters
+
+In JS, the constructor method must be named `constructor()`
+Private members have a prefix `#`
+
+```
+class ClassName {
+  #id = 0
+  name = '';
+  city = '';
+
+  constructor(id, name, city){
+    ...
+  }
+}
+```

@@ -1,3 +1,4 @@
+// http://es6-features.org/#Constants
 /* 
 1. let
 2. const
@@ -11,6 +12,7 @@
 10. arrow functions
 11. iterator
 12. template strings
+13. classes & inheritance
 */
 
 // array destructuring
@@ -96,3 +98,56 @@ for (let no of nos) console.log(no);
 var x = 100,
   y = 200;
 var s2 = `sum of ${x} and ${y} is ${x + y}`;
+
+// class
+class Employee {
+  #id = 0; //private field
+  name = "";
+  city = "";
+
+  get id() {
+    console.log("[get id] triggered");
+    return this.#id;
+  }
+  set id(val) {
+    console.log("[set id] triggered");
+    if (val <= 0) throw new Error("Invalid id");
+    this.#id = val;
+  }
+
+  constructor(id, name, city) {
+    this.#id = id;
+    this.name = name;
+    this.city = city;
+  }
+
+  //private method
+  #format() {
+    return `id = ${this.#id}, name = ${this.name}, city = ${this.city}`;
+  }
+
+  print() {
+    return this.#format();
+  }
+
+  //static method
+  static count() {
+    return 10;
+  }
+}
+
+class FulltimeEmployee extends Employee {
+  benefits = "";
+  constructor(id, name, city, benefits) {
+    //invoking the base class constructor
+    super(id, name, city);
+    this.benefits = benefits;
+  }
+
+  //overriding the base class method
+  print() {
+    return `${super.print()}, benefits = ${this.benefits}`;
+  }
+}
+var fte = new FulltimeEmployee(200, "Magesh", "Bangalore", "Healthcare");
+fte.print();
