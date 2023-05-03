@@ -65,10 +65,14 @@
   // And display the error message that was returned by the promise
   function divideAsync(x, y) {
     console.log(`   [@service] processing ${x} divided by ${y}`);
-    return divideAsyncPromise(x, y).catch(function (result) {
-      // callback invoked when the promise is "rejected"
-      console.log(`[@client] rejected : ${result}`);
-    });
+    return divideAsyncPromise(x, y)
+      .then((result) => {
+        console.log(`[@client] result = ${result}`);
+      })
+      .catch((err) => {
+        // callback invoked when the promise is "rejected"
+        console.log(`[@client] rejected : ${err}`);
+      });
   }
 
   function divideAsyncPromise(x, y) {
@@ -79,7 +83,6 @@
           rejectFn(err);
         } else {
           const result = x / y;
-          console.log(`   [@service] returning result`);
           resolveFn(result);
         }
       }, 2000);
