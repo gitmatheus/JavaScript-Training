@@ -28,3 +28,8 @@ id  name                            isClosed    createdAt
 5	'Test Bug'	                    false	    '2023-02-16T11:59:24.979Z'
 Array(4)
 ```
+
+### Bundler
+
+Your page can only make tops 6 requests at the same time.
+60 request would cause it to batch 10 requests.

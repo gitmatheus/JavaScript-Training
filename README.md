@@ -420,3 +420,8 @@ async function divideAsyncWithAwait(x, y) {
 If you are using VS code then you can use this command `shift + 1` and enter to auto-populate HTML Doctype in HTML or PHP.
 
 ![Example](https://i.stack.imgur.com/YyllG.png)
+
+### Bundler
+
+Your page can only make tops 6 requests at the same time.
+60 request would cause it to batch 10 requests.
