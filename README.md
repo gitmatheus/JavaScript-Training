@@ -339,3 +339,41 @@ var quadrupResult = addAsyncPromise(100, 200)
     })
 
 ```
+
+Doing the same thing with the divide method, with a quick refactor:
+
+```
+// This method will use divideAsyncPromise
+  // It will also catch if the result was rejected
+  // And display the error message that was returned by the promise
+  function divideAsync(x, y) {
+    console.log(`   [@service] processing ${x} divided by ${y}`);
+    return divideAsyncPromise(x, y)
+      .then((result) => {
+        console.log(`[@client] result = ${result}`);
+      })
+      .catch((err) => {
+        // callback invoked when the promise is "rejected"
+        console.log(`[@client] rejected : ${err}`);
+      });
+  }
+
+  function divideAsyncPromise(x, y) {
+    const p = new Promise(function (resolveFn, rejectFn) {
+      setTimeout(() => {
+        if (y === 0) {
+          const err = new Error("invalid arguments. divisor cannot be 0");
+          rejectFn(err);
+        } else {
+          const result = x / y;
+          resolveFn(result);
+        }
+      }, 2000);
+    });
+    return p;
+  }
+
+  window["divideAsync"] = divideAsync;
+```
+
+#### async and await

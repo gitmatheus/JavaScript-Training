@@ -92,6 +92,45 @@
 
   window["divideAsync"] = divideAsync;
   //==================================================
+  // Now let's do the same thing with Async and Await
+
+  // This method will use divideAsyncPromise
+  // It will also catch if the result was rejected
+  // And display the error message that was returned by the promise
+  async function divideAsyncWithAwait(x, y) {
+    console.log(`   [@service] processing ${x} divided by ${y}`);
+    const result = await divideAsyncPromise(x, y)
+      .then((result) => {
+        console.log(`[@client] result = ${result}`);
+        return result;
+      })
+      .catch((err) => {
+        // callback invoked when the promise is "rejected"
+        console.log(`[@client] rejected : ${err}`);
+        return err;
+      });
+
+    return result;
+  }
+
+  function divideAsyncWithAwaitPromise(x, y) {
+    const p = new Promise(function (resolveFn, rejectFn) {
+      setTimeout(() => {
+        if (y === 0) {
+          const err = new Error("invalid arguments. divisor cannot be 0");
+          rejectFn(err);
+        } else {
+          const result = x / y;
+          resolveFn(result);
+        }
+      }, 2000);
+    });
+    return p;
+  }
+
+  window["divideAsyncWithAwait"] = divideAsyncWithAwait;
+
+  //==================================================
 
   function divideAsyncClient() {
     console.log(`[@client] invoking the service`);
