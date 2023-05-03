@@ -287,3 +287,55 @@ class ClassName {
   }
 }
 ```
+
+### Promises and Callback Delegation
+
+- The service returns a promise
+- The promise is going to be created by the service
+- The client subscribe to the promise
+- Once the service is complete, the client process the result of the promise
+
+Promise, then, catch
+
+- Only the creator of the promise should be able to set the result.
+- The promise invoke the function with
+
+```
+new Promise (function(resolver, rejector)) {
+
+})
+```
+
+#### Follow up operation (Promise Chaining)
+
+Even if the result of the async operation is a sync operation, it should always return a promise.
+
+- Everything that is queued to be performed in future (async) will be considered async, and must be returned as a promise.
+- For that reason, instead of creating another promise running a sync operation, just use `resolve`
+
+```
+  const result = 2 + 2;
+  return Promise.resolve(result);
+
+```
+
+For chained promises
+
+```
+// This block happens asynchronously
+var quadrupResult = addAsyncPromise(100, 200)
+    .then(function (result) { // callback invoked when the promise is "resolved"
+        // This block happens synchronously (returned asynchronously)
+        console.log(`[@client] result = ${result}`)
+        //follow up operation (sync)
+        const doubleResult = result * 2
+        return doubleResult;
+    })
+    .then(doubleResult => { // callback invoked when the promise is "resolved"
+        // This block happens synchronously (returned asynchronously)
+        console.log(`doubleResult : ${doubleResult}`);
+        const quadResult = doubleResult * 2;
+        return quadResult;
+    })
+
+```

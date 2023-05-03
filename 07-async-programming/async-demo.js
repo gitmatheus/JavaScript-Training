@@ -87,4 +87,135 @@
     });
   }
   window["divideAsyncClient"] = divideAsyncClient;
+
+  function addAsyncPromise(x, y) {
+    console.log(`   [@service] processing ${x} and ${y}`);
+
+    const p = new Promise(function (resolveFn, rejectFn) {
+      setTimeout(() => {
+        const result = x + y;
+        console.log(`   [@service] returning result`);
+        resolveFn(result);
+      }, 2000);
+    });
+    return p;
+  }
+  window["addAsyncPromise"] = addAsyncPromise;
+
+  function divideAsyncPromise(x, y) {
+    console.log(`   [@service] processing ${x} and ${y}`);
+
+    const p = new Promise(function (resolveFn, rejectFn) {
+      setTimeout(() => {
+        const result = x / y;
+        console.log(`   [@service] returning result`);
+        resolveFn(result);
+      }, 2000);
+    });
+    return p;
+  }
+
+  window["divideAsyncPromise"] = divideAsyncPromise;
 })();
+
+//client
+/* 
+console.log(`[@client] invoking the service`)
+const p = divideAsyncPromise(100,200)
+.then(function(result) { // callback invoked when the promise is "resolved"
+    console.log(`[@client] result = ${result}`)
+}).catch(function(result) { // callback invoked when the promise is "rejected"
+    console.log(`[@client] rejected`)
+})
+
+
+//
+
+// follow up operation (async)
+/* 
+console.log(`[@client] invoking the service`)
+const p = addAsyncPromise(100, 200)
+var p2 = p.then(function (result) { // callback invoked when the promise is "resolved"
+    console.log(`[@client] result = ${result}`)
+
+    //follow up (async)
+    const p2 = new Promise((resolveFn, rejectFn) => {
+        setTimeout(() => {
+            const doubleResult = result * 2
+            resolveFn(doubleResult)
+        }, 4000);
+    });
+    return p2
+})
+p2.then(doubleResult => console.log(`doubleResult : ${doubleResult}`)) 
+*/
+
+// follow up operation (sync) - 1
+/* 
+console.log(`[@client] invoking the service`)
+const p = addAsyncPromise(100, 200)
+var p2 = p.then(function (result) { // callback invoked when the promise is "resolved"
+    console.log(`[@client] result = ${result}`)
+
+    //follow up (sync)
+    const p2 = new Promise((resolveFn, rejectFn) => {
+        const doubleResult = result * 2
+        resolveFn(doubleResult);
+    });
+    return p2
+})
+p2.then(doubleResult => console.log(`doubleResult : ${doubleResult}`)) 
+*/
+
+// follow up operation (sync) - 2
+/* 
+console.log(`[@client] invoking the service`)
+const p = addAsyncPromise(100, 200)
+var p2 = p.then(function (result) { // callback invoked when the promise is "resolved"
+    console.log(`[@client] result = ${result}`)
+
+    //follow up operation (sync)
+    const doubleResult = result * 2
+    const p2 = Promise.resolve(doubleResult)
+    return p2
+})
+p2.then(doubleResult => console.log(`doubleResult : ${doubleResult}`)) 
+*/
+
+// promise chaining - 1
+/* 
+console.log(`[@client] invoking the service`)
+const p = addAsyncPromise(100, 200)
+//p.then() by default returns a promise
+var p2 = p.then(function (result) { // callback invoked when the promise is "resolved"
+    console.log(`[@client] result = ${result}`)
+
+    //follow up operation (sync)
+    const doubleResult = result * 2
+    return doubleResult;
+})
+var p3 = p2.then(doubleResult => {
+    console.log(`doubleResult : ${doubleResult}`);
+    return 'dummy result'
+}) 
+*/
+
+// promise chaining - 1
+// THE WAY TO GO
+/* 
+console.log(`[@client] invoking the service`)
+var quadrupResult = addAsyncPromise(100, 200)
+    .then(function (result) { // callback invoked when the promise is "resolved"
+        console.log(`[@client] result = ${result}`)
+        //follow up operation (sync)
+        const doubleResult = result * 2
+        return doubleResult;
+    })
+    .then(doubleResult => {
+        console.log(`doubleResult : ${doubleResult}`);
+        const quadResult = doubleResult * 2;
+        return quadResult;
+    }) 
+
+
+*/
