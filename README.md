@@ -377,3 +377,46 @@ Doing the same thing with the divide method, with a quick refactor:
 ```
 
 #### async and await
+
+Lets do the same thing with `await` and `async`
+
+```
+async function divideAsyncWithAwait(x, y) {
+    console.log(`   [@service] processing ${x} divided by ${y}`);
+    const result = await divideAsyncPromise(x, y)
+      .then((result) => {
+        console.log(`[@client] result = ${result}`);
+        return result;
+      })
+      .catch((err) => {
+        // callback invoked when the promise is "rejected"
+        console.log(`[@client] rejected : ${err}`);
+        return err;
+      });
+
+    return result;
+  }
+
+  function divideAsyncWithAwaitPromise(x, y) {
+    const p = new Promise(function (resolveFn, rejectFn) {
+      setTimeout(() => {
+        if (y === 0) {
+          const err = new Error("invalid arguments. divisor cannot be 0");
+          rejectFn(err);
+        } else {
+          const result = x / y;
+          resolveFn(result);
+        }
+      }, 2000);
+    });
+    return p;
+  }
+
+  window["divideAsyncWithAwait"] = divideAsyncWithAwait;
+```
+
+### VSCODE tips
+
+If you are using VS code then you can use this command `shift + 1` and enter to auto-populate HTML Doctype in HTML or PHP.
+
+![Example](https://i.stack.imgur.com/YyllG.png)
