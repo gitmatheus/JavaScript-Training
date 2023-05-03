@@ -76,6 +76,8 @@
 
   function divideAsyncClient() {
     console.log(`[@client] invoking the service`);
+
+    // call divideAsync with err and result (callback), and process the response
     divideAsync(100, 0, function (err, result) {
       if (err) {
         console.log(`[@client] error occurred : ${err}`);
