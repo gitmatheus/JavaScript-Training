@@ -58,21 +58,37 @@
 
   window["addAsyncClient"] = addAsyncClient;
 
-  //handling errors
-  function divideAsync(x, y, callback) {
-    console.log(`   [@service] processing ${x} and ${y}`);
-    setTimeout(() => {
-      if (y === 0) {
-        // throw new Error('invalid arguments. divisor cannot be 0')
-        const err = new Error("invalid arguments. divisor cannot be 0");
-        callback(err, undefined);
-        return;
-      }
-      const result = x / y;
-      console.log(`   [@service] returning result`);
-      callback(undefined, result);
-    }, 5000);
+  //==================================================
+  // handling errors
+  // This method will use divideAsyncPromise
+  // It will also catch if the result was rejected
+  // And display the error message that was returned by the promise
+  function divideAsync(x, y) {
+    console.log(`   [@service] processing ${x} divided by ${y}`);
+    return divideAsyncPromise(x, y).catch(function (result) {
+      // callback invoked when the promise is "rejected"
+      console.log(`[@client] rejected : ${result}`);
+    });
   }
+
+  function divideAsyncPromise(x, y) {
+    const p = new Promise(function (resolveFn, rejectFn) {
+      setTimeout(() => {
+        if (y === 0) {
+          const err = new Error("invalid arguments. divisor cannot be 0");
+          rejectFn(err);
+        } else {
+          const result = x / y;
+          console.log(`   [@service] returning result`);
+          resolveFn(result);
+        }
+      }, 2000);
+    });
+    return p;
+  }
+
+  window["divideAsync"] = divideAsync;
+  //==================================================
 
   function divideAsyncClient() {
     console.log(`[@client] invoking the service`);
@@ -89,7 +105,7 @@
   window["divideAsyncClient"] = divideAsyncClient;
 
   function addAsyncPromise(x, y) {
-    console.log(`   [@service] processing ${x} and ${y}`);
+    console.log(`   [@service] processing ${x} + ${y}`);
 
     const p = new Promise(function (resolveFn, rejectFn) {
       setTimeout(() => {
@@ -101,21 +117,6 @@
     return p;
   }
   window["addAsyncPromise"] = addAsyncPromise;
-
-  function divideAsyncPromise(x, y) {
-    console.log(`   [@service] processing ${x} and ${y}`);
-
-    const p = new Promise(function (resolveFn, rejectFn) {
-      setTimeout(() => {
-        const result = x / y;
-        console.log(`   [@service] returning result`);
-        resolveFn(result);
-      }, 2000);
-    });
-    return p;
-  }
-
-  window["divideAsyncPromise"] = divideAsyncPromise;
 })();
 
 //client
@@ -217,5 +218,20 @@ var quadrupResult = addAsyncPromise(100, 200)
         return quadResult;
     }) 
 
+console.log(`[@client] invoking the service`)
+var divideResult = addAsyncPromise(100, 200)
+    .then(function (result) { // callback invoked when the promise is "resolved"
+        console.log(`[@client] result = ${result}`)
+        //follow up operation (sync)
+        const doubleResult = result * 2
+        return doubleResult;
+    })
+    .then(doubleResult => {
+        console.log(`doubleResult : ${doubleResult}`);
+        const quadResult = doubleResult * 2;
+        return quadResult;
+    }) 
 
+console.log(`[@client] invoking the service`)
+var divideResult = divideAsync(100, 200)
 */
