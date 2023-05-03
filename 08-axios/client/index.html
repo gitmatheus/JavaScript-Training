@@ -6,9 +6,68 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Bug Tracker</title>
     <script src="axios.min.js"></script>
+    <script>
+      (() => {
+        let bugsList;
+
+        function createBugItem(bug) {
+          const bugItem = document.createElement("li");
+          bugItem.innerText = bug.name;
+          return bugItem;
+        }
+
+        function appendBugItem(bugItem) {
+          bugsList.appendChild(bugItem);
+        }
+
+        async function loadBugs() {
+          const response = await axios.get("http://localhost:3000/bugs");
+          const bugs = response.data;
+          /* bugs
+                    .map(createBugItem)
+                    .forEach(appendBugItem) 
+                */
+          bugs
+            .map((bug) => createBugItem(bug))
+            .forEach((bugItem) => appendBugItem(bugItem));
+        }
+
+        async function onBtnAddNewClick() {
+          const newBugName = document.getElementById("txtNewBugName").value;
+          const newBugData = {
+            id: 0,
+            name: newBugName,
+            isClosed: false,
+            createdAt: new Date(),
+          };
+          const response = await axios.post(
+            "http://localhost:3000/bugs",
+            newBugData
+          );
+          const newBug = response.data;
+          const newBugItem = createBugItem(newBug);
+          appendBugItem(newBugItem);
+        }
+        function onDocumentLoad() {
+          bugsList = document.getElementById("bugsList");
+          const btnAddNew = document.getElementById("btnAddNew");
+          btnAddNew.addEventListener("click", onBtnAddNewClick);
+          loadBugs();
+        }
+
+        window.addEventListener("load", onDocumentLoad);
+      })();
+    </script>
   </head>
   <body>
     <h1>Bug Tracker</h1>
-    <h4>Loading bugs...</h1>
+    <hr />
+    <h3>Bugs</h3>
+    <section>
+      <label for="">Bug Name :</label>
+      <input type="text" name="" id="txtNewBugName" />
+      <button id="btnAddNew">Add New</button>
+    </section>
+    <ul id="bugsList"></ul>
   </body>
 </html>
