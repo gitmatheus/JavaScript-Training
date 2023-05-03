@@ -1,0 +1,15 @@
+Storage
+    - localStorage (persistent)
+        * key/value store
+        * both key & value must be strings
+        * same origin policy
+        * apis
+            - setItem(key, value)
+            - getItem(key) => value
+            - removeItem(key) 
+            - key(index) => key @ index
+            - clear()
+            - length
+    - sessionStorage (transient)
+    - indexedDB
+        - document store
