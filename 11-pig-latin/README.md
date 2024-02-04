@@ -44,3 +44,33 @@ This project is open for contributions, whether they be additional features, imp
 - **Language Support Expansion**: Extend the project to include translation logic for languages beyond English, offering a broader scope for applying JavaScript in varied contexts. This expansion encourages exploration into handling more accented vowels and special characters that are prevalent in many languages.
 
 This README is crafted to outline the educational journey of developing a Pig Latin Translation Script in JavaScript. It highlights the project's purpose, learning outcomes, and potential for future exploration, inviting collaboration and shared growth in the JavaScript community.
+
+---
+
+## The Four Rules of Pig Latin
+
+**Rules**: [https://www.wikihow.com/Speak-Pig-Latin](https://www.wikihow.com/Speak-Pig-Latin)
+
+Master these four basic rules of Pig Latin to instantly convert any English sentence. For more detailed rules, visit [this guide on how to speak Pig Latin](https://www.wikihow.com/Speak-Pig-Latin).
+
+1. **Words Beginning With Consonants or Consonant Clusters:**
+
+   - For words starting with a consonant or a consonant cluster, move it/them to the end of the word and add the suffix "-ay".
+   - Examples: `"Duck"` becomes `"Uck-day"`, `"Move"` becomes `"Ove-may"`, `"Scratch"` becomes `"Atch-scray"`.
+
+2. **Words Beginning With Vowels:**
+
+   - For words starting with a vowel, simply add the suffix "-yay" to the end of the word.
+   - Examples: `"Oval"` becomes `"Oval-yay"`, `"Ultimate"` becomes `"Ultimate-yay"`, `"Odd"` becomes `"Odd-yay"`.
+
+3. **Treatment of the Letter 'Y':**
+
+   - 'Y' at the start acts as a consonant: move 'Y' to the end and add "-ay" (e.g., `"Yellow"` becomes `"Ellow-yay"`).
+   - 'Y' not at the start and followed by a consonant acts as a vowel (e.g., `"Bypass"` becomes `"Ypass-bay"`).
+   - 'Y' not at the start but followed by a vowel acts as a consonant (e.g., `"Cyan"` becomes `"An-cyay"`).
+
+4. **Handling Compound Words** [ToDo]:
+   - Splitting compound words before translation makes them less comprehensible, thus better disguising the original words.
+   - Examples: `"Bedroom"` becomes `"Ed-bay oom-ray"`, `"Toothbrush"` becomes `"Ooth-tay ush-bray"`.
+
+Understanding these rules allows for the efficient and accurate translation of English into Pig Latin, enhancing both the fun and challenge of the language.
