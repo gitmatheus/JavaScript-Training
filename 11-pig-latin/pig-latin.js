@@ -3,133 +3,211 @@
    Vowels are "AaEeIiOoUu" and "Y" under specific conditions.
 */
 
-const vowelSuffix = "yay";
-const consSuffix = "ay";
+const vowelSuffix = "yay"; // Suffix for words beginning with vowels
+const consSuffix = "ay"; // Suffix for words beginning with consonants
 
-// Converts the first letter of the translated word
-// if the original was capitalized
-function normalizeCase(oldWord, newWord) {
-  const prefix =
-    oldWord[0] === oldWord[0].toUpperCase()
-      ? newWord.charAt(0).toUpperCase()
-      : newWord.charAt(0);
-  return prefix + newWord.slice(1).toLowerCase();
+/**
+ * Adjusts the case of the new text to match the original text's first letter case.
+ *
+ * @param {string} oldText - The original text.
+ * @param {string} newText - The translated text in Pig Latin.
+ * @returns {string} - The new text with the case of its first letter adjusted.
+ */
+function normalizeCase(oldText, newText) {
+  const isCapitalized = oldText[0] === oldText[0].toUpperCase();
+  const prefix = isCapitalized
+    ? newText.charAt(0).toUpperCase()
+    : newText.charAt(0);
+  return prefix + newText.slice(1).toLowerCase();
 }
 
-// Removes trailing, leading, and duplicate spaces
+/**
+ * Removes leading, trailing, and consecutive duplicate spaces from a term.
+ *
+ * @param {string} term - The input string to clean.
+ * @returns {string} - The cleaned string.
+ */
 function normalizeSpaces(term) {
   return term.trim().replace(/\s+/g, " ");
 }
 
-function isPhrase(term) {
-  return term.length >= 3 && term.includes(" ");
-}
-
-function isVowel(word, index) {
-  // Directly return false if the index is out of bounds
-  if (index < 0 || index >= word.length) return false;
-  const letter = word[index].toLowerCase();
-
+/**
+ * Determines if a character at a given index in a word is a vowel.
+ *
+ * @param {string} text - The word to check.
+ * @param {number} index - The index of the character in the word.
+ * @returns {boolean} - True if the character is a vowel, false otherwise.
+ */
+function isVowel(text, index) {
+  if (index < 0 || index >= text.length) return false;
+  const letter = text[index].toLowerCase();
   const vowels = "aeiou";
 
-  // Check for standard vowels
+  // Directly handles when the letter is a known vowel
   if (vowels.includes(letter)) return true;
 
-  // Handling the special case for 'y'
-  // 'y' is considered a vowel when:
-  //  - it is not at the start or end of a word
-  //  - it is not followed by another vowel
-  if (letter === "y") {
-    // Check 'y' is not at the start and not at the end
-    if (index > 0 && index < word.length - 1) {
-      // Ensure the next letter is not a vowel for 'y' to be considered as a vowel
-      const nextLetter = word[index + 1].toLowerCase();
-      return !vowels.includes(nextLetter);
-    }
+  // Directly handles when the letter is not a known vowel, nor 'y'
+  if (letter !== "y") return false;
+
+  // 'y' is a special case:
+  // Considered a vowel when at the end of the word
+  if (index === text.length - 1) return true;
+
+  // Considered a vowel when not at the start and not followed by another vowel
+  if (index > 0 && index < text.length - 1) {
+    return !vowels.includes(text[index + 1].toLowerCase());
   }
 
-  // If none of the above conditions are met, the letter is not a vowel
   return false;
 }
-function appendSuffix(word, suffix) {
-  return `${word}-${suffix}`;
+
+/**
+ * Finds the index of the first vowel in a word
+ *
+ * @param {string} text - The word to check.
+ * @returns {number} - The index of the first vowel or -1 if no vowel is found.
+ */
+function getFirstVowelIndex(text) {
+  return Array.from(text).findIndex((_, index) => isVowel(text, index));
 }
 
+/**
+ * Builds the translated text in Pig Latin, normalizes its case, appends the appropriate suffix,
+ * and adds any punctuation back to the end.
+ *
+ * @param {string} baseText - The original text to be translated.
+ * @param {string} rest - The rest of the word after removing the initial consonant cluster, if any.
+ * @param {string} cluster - The initial consonant cluster, if the word starts with a consonant(s).
+ * @param {string} suffix - The suffix to be appended ("yay" for vowel start, "ay" for consonant start).
+ * @param {string} punctuation - Any punctuation to be appended at the end of the translated word.
+ * @returns {string} - The fully translated word or phrase in Pig Latin.
+ */
+function buildTranslation(baseText, rest, cluster, suffix, punctuation) {
+  // Determine the text to append the suffix to (rest + cluster for consonant-starting words, baseText for vowel-starting words)
+  const appendedText = rest
+    ? `${rest}-${cluster}${suffix}${punctuation}`
+    : `${baseText}-${suffix}${punctuation}`;
+
+  // Normalize the case based on the original text
+  return normalizeCase(baseText, appendedText);
+}
+
+/**
+ * Convenience method to call buildTranslation() with less parameters
+ *
+ * @param {string} baseText - The original text to be translated.
+ * @param {string} suffix - The suffix to be appended ("yay" for vowel start, "ay" for consonant start).
+ * @param {string} punctuation - Any punctuation to be appended at the end of the translated word.
+ * @returns {string} - The fully translated word or phrase in Pig Latin.
+ */
+function buildBaseTranslation(baseText, suffix, punctuation) {
+  return buildTranslation(baseText, null, null, suffix, punctuation);
+}
+
+/**
+ * Translates a phrase (multiple words) into Pig Latin by translating each word individually.
+ *
+ * @param {string} phrase - The phrase to translate.
+ * @returns {string} - The translated phrase.
+ */
 function translatePigLatinPhrase(phrase) {
-  // Split the input string into an array of words
-  const wordsArray = phrase.split(" ");
-
-  // Map over the array, translating each word to Pig Latin
-  const translatedWordsArray = wordsArray.map((word) =>
-    translatePigLatin(word)
-  );
-
-  // Join the translated words back into a single string, with spaces in between
-  return translatedWordsArray.join(" ");
+  return phrase.split(" ").map(translatePigLatin).join(" ");
 }
 
-function translatePigLatin(word) {
-  if (!word) return word;
+/**
+ * Translates a single word or a phrase into Pig Latin.
+ *
+ * @param {string} text - The word or phrase to translate.
+ * @returns {string} - The translated word or phrase.
+ */
+function translatePigLatin(text) {
+  if (!text) return text;
+  const normalizedText = normalizeSpaces(text);
 
-  // Normalize spaces
-  const term = normalizeSpaces(word);
-
-  // ToDo: split compound words, perhaps with a predefined dictionary of root words
-
-  // If the string contains more than one word
-  if (isPhrase(term)) {
-    return translatePigLatinPhrase(term);
+  // Split and translate phrases (multiple words)
+  if (normalizedText.includes(" ")) {
+    return translatePigLatinPhrase(normalizedText);
   }
 
-  // Check if the word starts with a vowel
-  if (isVowel(term, 0)) {
-    return normalizeCase(term, appendSuffix(term, vowelSuffix));
+  const punctuation = normalizedText.match(/[.,!?]+$/)?.[0] || "";
+  const baseText = normalizedText.replace(/[.,!?]+$/, "");
+
+  // Translate single word based on the presence of vowels
+  if (isVowel(baseText, 0)) {
+    return buildBaseTranslation(baseText, vowelSuffix, punctuation);
   }
 
-  // If the first letter is not a vowel, we find the first vowel using isVowel
-  let firstVowelIndex = -1;
-  for (let i = 0; i < word.length; i++) {
-    if (isVowel(word, i)) {
-      firstVowelIndex = i;
-      break;
-    }
-  }
-
-  // If no vowel found in the word, treat the whole word as a consonant cluster
+  const firstVowelIndex = getFirstVowelIndex(baseText);
   if (firstVowelIndex === -1) {
-    return normalizeCase(word, appendSuffix(word, consSuffix));
+    return buildBaseTranslation(baseText, consSuffix, punctuation);
   }
 
-  // Split the word into the consonant cluster and the rest, then append the suffix
-  const cluster = word.substring(0, firstVowelIndex);
-  const rest = word.substring(firstVowelIndex);
-  return normalizeCase(word, appendSuffix(rest, `${cluster}${consSuffix}`));
+  // Handle consonant clusters at the start of words
+  const cluster = baseText.substring(0, firstVowelIndex);
+  const rest = baseText.substring(firstVowelIndex);
+  return buildTranslation(baseText, rest, cluster, consSuffix, punctuation);
 }
 
+/**
+ * Asserts the equality of the expected value and the actual value, logging the result.
+ *
+ * @param {string} value - The input value to test.
+ * @param {string} expected - The expected outcome.
+ */
 function assertEquals(value, expected) {
   const actual = translatePigLatin(value);
   console.log(`Match: ${expected === actual} | ${value} | ${actual}`);
 }
 
-assertEquals("Matheus", "Atheus-may");
-assertEquals("Avocado", "Avocado-yay");
-assertEquals("Brush", "Ush-bray");
-assertEquals("Hymn", "Ymn-hay");
-assertEquals("hello", "ello-hay");
-assertEquals("switch", "itch-sway");
-assertEquals("Avocado is a fruit", "Avocado-yay is-yay a-yay uit-fray");
-assertEquals("fruit smoothie", "uit-fray oothie-smay");
-assertEquals("Can't", "An't-cay");
-assertEquals("Pseudo science", "Eudo-psay ience-scay");
-assertEquals(
-  "Sam is  the  real  hero ",
-  "Am-say is-yay e-thay eal-ray ero-hay"
-);
-assertEquals("yellow", "ellow-yay");
-assertEquals("Year", "Ear-yay");
-assertEquals("bypass", "ypass-bay");
-assertEquals("Rhythm", "Ythm-rhay");
-assertEquals("tooth brush", "ooth-tay ush-bray");
+// Define test cases as an array of objects with word and expected properties
+const testCases = [
+  { word: "Avocado is a fruit", expected: "Avocado-yay is-yay a-yay uit-fray" },
+  { word: "Avocado", expected: "Avocado-yay" },
+  { word: "Brush", expected: "Ush-bray" },
+  { word: "Can't", expected: "An't-cay" },
+  { word: "Hymn", expected: "Ymn-hay" },
+  { word: "I", expected: "I-yay" },
+  { word: "Matheus", expected: "Atheus-may" },
+  { word: "Move", expected: "Ove-may" },
+  { word: "Odd", expected: "Odd-yay" },
+  { word: "Oval", expected: "Oval-yay" },
+  { word: "Pig Latin", expected: "Ig-pay Atin-lay" },
+  { word: "Pseudo science", expected: "Eudo-psay ience-scay" },
+  { word: "Rhythm", expected: "Ythm-rhay" },
+  {
+    word: "Sam is  the  real  hero ",
+    expected: "Am-say is-yay e-thay eal-ray ero-hay",
+  },
+  { word: "Ultimate", expected: "Ultimate-yay" },
+  { word: "What's up?", expected: "At's-whay up-yay?" },
+  { word: "X", expected: "X-ay" },
+  { word: "Year", expected: "Ear-yay" },
+  { word: "bypass", expected: "ypass-bay" },
+  { word: "duck", expected: "uck-day" },
+  { word: "egg", expected: "egg-yay" },
+  { word: "fruit smoothie", expected: "uit-fray oothie-smay" },
+  { word: "glove", expected: "ove-glay" },
+  { word: "hello", expected: "ello-hay" },
+  { word: "inbox", expected: "inbox-yay" },
+  { word: "it", expected: "it-yay" },
+  { word: "my", expected: "y-may" },
+  { word: "ocean", expected: "ocean-yay" },
+  {
+    word: "Oh My!! Where are you!?!",
+    expected: "Oh-yay Y-may!! Ere-whay are-yay ou-yay!?!",
+  },
+  { word: "scratch", expected: "atch-scray" },
+  { word: "switch", expected: "itch-sway" },
+  { word: "tooth brush", expected: "ooth-tay ush-bray" },
+  { word: "y", expected: "y-yay" },
+  { word: "you", expected: "ou-yay" },
+  { word: "yellow", expected: "ellow-yay" },
+];
+
+// Loop through each test case and run assertions
+testCases.forEach((testCase) => {
+  assertEquals(testCase.word, testCase.expected);
+});
 
 /*
 ===========================================================================================
