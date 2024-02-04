@@ -41,7 +41,7 @@ function normalizeSpaces(term) {
 function isVowel(text, index) {
   if (index < 0 || index >= text.length) return false;
   const letter = text[index].toLowerCase();
-  const vowels = "aeiou";
+  const vowels = "aeiouAEIOUàáâãäåæÀÁÂÃÄÅÆèéêëÈÉÊËìíîïÌÍÎÏòóôõöøÒÓÔÕÖØùúûüÙÚÛÜ";
 
   // Directly handles when the letter is a known vowel
   if (vowels.includes(letter)) return true;
