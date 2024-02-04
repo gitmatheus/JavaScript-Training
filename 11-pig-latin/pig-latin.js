@@ -3,7 +3,6 @@
    Vowels are "AaEeIiOoUu" and "Y" under specific conditions.
 */
 
-const vowels = "AaEeIiOoUu";
 const vowelSuffix = "yay";
 const consSuffix = "ay";
 
@@ -18,7 +17,7 @@ function normalizeCase(oldWord, newWord) {
 }
 
 function isVowel(letter) {
-  return vowels.includes(letter);
+  return "aeiou".includes(letter.toLowerCase());
 }
 
 function isLastLetter(word, index) {
@@ -26,13 +25,11 @@ function isLastLetter(word, index) {
 }
 
 function appendSuffix(word, suffix) {
-  return word + "-" + suffix;
+  return `${word}-${suffix}`;
 }
 
 function translatePigLatin(word) {
-  if (word === null || word.length <= 1) {
-    return word;
-  }
+  if (!word || word.length <= 1) return word;
 
   // The first letter is a vowel
   if (isVowel(word[0])) {
@@ -42,32 +39,27 @@ function translatePigLatin(word) {
   // If the first letter is not a vowel
   // Create a cluster of consonants and append the suffix accordingly
 
-  let cluster = "";
-  for (let index = 0; index < word.length; index++) {
-    const letter = word[index];
-    cluster = cluster + letter;
+  // Match leading consonant cluster and the rest
+  const match = word.match(/(^[^aeiou]+)(.*)/i);
+  if (match) {
+    const [, cluster, rest] = match;
 
-    // Not the last letter, and the next is a vowel
-    if (!isLastLetter(word, index) && isVowel(word[index + 1])) {
-      const translWord = appendSuffix(
-        word.substring(index + 1),
-        cluster + consSuffix
-      );
-      return normalizeCase(word, translWord);
-    }
+    // Fallback for words without vowels (unlikely in English, but just in case)
+    if (!rest) return normalizeCase(word, appendSuffix(word, consSuffix));
 
-    if (isLastLetter(word, index)) {
-      return normalizeCase(word, appendSuffix(word, consSuffix));
-    }
+    return normalizeCase(word, appendSuffix(rest, `${cluster}${consSuffix}`));
   }
 
   return word;
 }
 
+console.log(translatePigLatin(null));
+console.log(translatePigLatin(""));
+console.log(translatePigLatin("X"));
 console.log(translatePigLatin("Matheus"));
 console.log(translatePigLatin("Avocado"));
 console.log(translatePigLatin("Brush"));
-console.log(translatePigLatin("hymn"));
+console.log(translatePigLatin("Hymn"));
 console.log(translatePigLatin("hello"));
 console.log(translatePigLatin("switch"));
 console.log(translatePigLatin("glove"));
@@ -75,6 +67,7 @@ console.log(translatePigLatin("fruit"));
 console.log(translatePigLatin("smoothie"));
 console.log(translatePigLatin("Can't"));
 console.log(translatePigLatin("Pseudo-science"));
+console.log(translatePigLatin("Renata"));
 
 /*
 ===========================================================================================
