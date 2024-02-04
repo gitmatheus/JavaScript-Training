@@ -1,4 +1,4 @@
-/* Matheus Gonçalves - 2023/JAN - v4.0
+/* Matheus Gonçalves - 2024/JAN - v4.0
    Pig Latin translation that manages vowels, treats 'Y' under specific conditions, 
    respects case sensitivity, and handles punctuation.
 */
