@@ -1,4 +1,4 @@
-# js-training-2023
+# JavaScript Training
 
 ### Create a new package
 
